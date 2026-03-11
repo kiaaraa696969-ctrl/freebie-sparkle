@@ -388,45 +388,8 @@ export default function Admin() {
           ))}
         </Section>
 
-        {/* Bulk Drop */}
-        <Section icon={<Zap className="w-4 h-4 text-primary" />} title="Bulk Drop">
-          <form onSubmit={handleBulkAdd} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="sm:col-span-2"><input type="text" value={bulkTitle} onChange={e => setBulkTitle(e.target.value)} placeholder="Title prefix" className="admin-input" /></div>
-            <div><select value={bulkCategory} onChange={e => setBulkCategory(e.target.value as AccountCategory)} className="admin-input cursor-pointer">{Object.keys(CATEGORY_COLORS).map(c => <option key={c} value={c}>{c}</option>)}</select></div>
-            {bulkCategory === 'Netflix' && (
-              <div><select value={bulkNetflixType} onChange={e => setBulkNetflixType(e.target.value as NetflixType)} className="admin-input cursor-pointer"><option value="account">Account</option><option value="cookies">Cookies</option></select></div>
-            )}
-            {!(bulkCategory === 'Netflix' && bulkNetflixType === 'cookies') && (
-              <div className="sm:col-span-2"><textarea value={bulkPaste} onChange={e => setBulkPaste(e.target.value)} placeholder="email:password per line" rows={4} className="admin-input resize-y font-mono" /></div>
-            )}
-            {bulkCategory === 'Netflix' && bulkNetflixType === 'cookies' && (
-              <div className="sm:col-span-2">
-                <input type="file" accept=".rar,.zip,.7z" onChange={handleBulkCookieChange} className="hidden" id="bulk-cookie" />
-                {bulkCookieFile ? (
-                  <div className="flex items-center gap-2 p-2.5 bg-muted rounded-lg border border-border">
-                    <FileArchive className="w-3.5 h-3.5 text-primary" /><span className="text-xs flex-1">{bulkCookieFile.name}</span>
-                    <button type="button" onClick={() => setBulkCookieFile(null)} className="text-muted-foreground hover:text-destructive cursor-pointer"><X className="w-3.5 h-3.5" /></button>
-                  </div>
-                ) : <label htmlFor="bulk-cookie" className="w-full p-3 border border-dashed border-border rounded-lg text-xs text-muted-foreground hover:border-primary cursor-pointer flex items-center justify-center gap-2"><FileArchive className="w-3.5 h-3.5" /> Upload cookie file</label>}
-              </div>
-            )}
-            {bulkCategory === 'Steam' && <div className="sm:col-span-2"><input type="text" value={bulkGames} onChange={e => setBulkGames(e.target.value)} placeholder="Games" className="admin-input" /></div>}
-            {bulkCategory === 'Crunchyroll' && <div className="sm:col-span-2"><input type="text" value={bulkPlanDetails} onChange={e => setBulkPlanDetails(e.target.value)} placeholder="Plan" className="admin-input" /></div>}
-            <div className="sm:col-span-2"><textarea value={bulkNotes} onChange={e => setBulkNotes(e.target.value)} rows={2} placeholder="Notes" className="admin-input resize-none" /></div>
-            <div className="sm:col-span-2">
-              <input type="file" accept="image/*" onChange={handleBulkFileChange} className="hidden" id="bulk-ss" />
-              {bulkScreenshot ? (
-                <div className="relative inline-block"><img src={bulkScreenshot} alt="" className="w-28 h-16 object-cover rounded-lg border border-border" /><button type="button" onClick={() => setBulkScreenshot(null)} className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center cursor-pointer"><X className="w-2.5 h-2.5" /></button></div>
-              ) : <label htmlFor="bulk-ss" className="w-full p-3 border border-dashed border-border rounded-lg text-xs text-muted-foreground hover:border-primary cursor-pointer flex items-center justify-center gap-2"><ImagePlus className="w-3.5 h-3.5" /> Screenshot</label>}
-            </div>
-            {bulkError && <p className="sm:col-span-2 text-destructive text-[11px]">{bulkError}</p>}
-            {bulkSuccess && <p className="sm:col-span-2 text-success text-[11px]">{bulkSuccess}</p>}
-            <div className="sm:col-span-2"><button type="submit" disabled={bulkAdding} className="px-5 py-2.5 rounded-lg text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 cursor-pointer flex items-center gap-1.5 disabled:opacity-50"><Plus className="w-3.5 h-3.5" /> {bulkAdding ? 'Adding...' : 'Bulk Drop'}</button></div>
-          </form>
-        </Section>
-
-        {/* Single Drop */}
-        <Section icon={<Plus className="w-4 h-4 text-primary" />} title="Drop Single Account">
+        {/* Drop Accounts */}
+        <Section icon={<Plus className="w-4 h-4 text-primary" />} title="Drop Accounts">
           <AccountDropForm onAccountAdded={() => fetchAccounts().then(setAccounts)} userId={user?.id} />
         </Section>
 
