@@ -165,48 +165,7 @@ export default function Admin() {
       fetchAnnouncements(); } catch {}
   };
 
-  // Bulk drop
-  const handleBulkAdd = async (e: React.FormEvent) => {
-    e.preventDefault(); setBulkError(''); setBulkSuccess('');
-    const isBC = bulkCategory === 'Netflix' && bulkNetflixType === 'cookies';
-    const lines = bulkPaste.trim().split('\n').filter(l => l.trim());
-    if (!isBC && lines.length === 0) { setBulkError('Paste at least one email:password line.'); return; }
-    if (!bulkTitle.trim()) { setBulkError('Title required.'); return; }
-    if (isBC && !bulkCookieFile) { setBulkError('Upload cookie file.'); return; }
-    setBulkAdding(true);
-    if (isBC && lines.length === 0) {
-      const r = await addAccount({ title: bulkTitle, category: bulkCategory, email: '', password: '', notes: bulkNotes || undefined, screenshot: bulkScreenshot || undefined, netflixType: bulkNetflixType, cookieFile: bulkCookieFile?.data, cookieFileName: bulkCookieFile?.name });
-      if (r) { sendWebhook(r); setBulkSuccess('Added 1 account!'); } else setBulkError('Failed.');
-    } else {
-      const parsed = lines.map(l => { const p = l.split(':'); return p.length >= 2 ? { email: p[0].trim(), password: p.slice(1).join(':').trim() } : null; });
-      if (parsed.some(p => !p)) { setBulkError('Invalid format.'); setBulkAdding(false); return; }
-      let added = 0;
-      for (let i = 0; i < parsed.length; i++) {
-        const p = parsed[i]!;
-        const r = await addAccount({ title: lines.length === 1 ? bulkTitle : `${bulkTitle} #${i + 1}`, category: bulkCategory, email: p.email, password: p.password, notes: bulkNotes || undefined, screenshot: bulkScreenshot || undefined, games: bulkCategory === 'Steam' ? bulkGames || undefined : undefined, planDetails: bulkCategory === 'Crunchyroll' ? bulkPlanDetails || undefined : undefined, netflixType: bulkCategory === 'Netflix' ? bulkNetflixType : undefined, cookieFile: isBC && bulkCookieFile ? bulkCookieFile.data : undefined, cookieFileName: isBC && bulkCookieFile ? bulkCookieFile.name : undefined });
-        if (r) { added++; if (added === 1) sendWebhook(r); }
-      }
-      setBulkSuccess(`Added ${added}/${lines.length}!`);
-    }
-    setBulkAdding(false); setBulkPaste(''); setBulkTitle(''); setBulkNotes(''); setBulkGames(''); setBulkPlanDetails(''); setBulkScreenshot(null); setBulkCookieFile(null);
-    fetchAccounts().then(setAccounts); setTimeout(() => setBulkSuccess(''), 4000);
-  };
 
-  const sendWebhook = async (a: AccountDrop) => {
-    try { await supabase.functions.invoke('discord-webhook', { body: { title: a.title, category: a.category, imageUrl: a.screenshot || undefined, accountUrl: `${window.location.origin}/account/${a.slug}` } }); } catch {}
-  };
-
-  const handleBulkFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; if (!file || file.size > 5 * 1024 * 1024) return;
-    const name = `${crypto.randomUUID()}.${file.name.split('.').pop() || 'png'}`;
-    const { error } = await supabase.storage.from('screenshots').upload(name, file, { contentType: file.type, upsert: true });
-    if (!error) { const { data } = supabase.storage.from('screenshots').getPublicUrl(name); setBulkScreenshot(data.publicUrl); }
-  };
-
-  const handleBulkCookieChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; if (!file || file.size > 10 * 1024 * 1024) return;
-    const reader = new FileReader(); reader.onload = () => setBulkCookieFile({ data: reader.result as string, name: file.name }); reader.readAsDataURL(file);
-  };
 
   const handleDelete = async (id: string) => { await deleteAccount(id); fetchAccounts().then(setAccounts); };
   const handleReset = async (id: string) => { await resetClaim(id); fetchAccounts().then(setAccounts); };
