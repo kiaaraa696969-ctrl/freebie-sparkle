@@ -195,7 +195,7 @@ const AccountReveal = () => {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    <CredentialRow label="Email" value={account.email} copied={copied === 'email'} onCopy={() => handleCopy(account.email, 'email')} />
+                    <CredentialRow label="Username / Email" value={account.email} copied={copied === 'email'} onCopy={() => handleCopy(account.email, 'email')} />
                     <CredentialRow label="Password" value={account.password} copied={copied === 'password'} onCopy={() => handleCopy(account.password, 'password')} />
                   </div>
                 )}
