@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { AccountDrop, AccountCategory, NetflixType, CATEGORY_COLORS, fetchAccounts, addAccount, deleteAccount, resetClaim } from '@/lib/accounts';
+import { AccountDrop, CATEGORY_COLORS, fetchAccounts, deleteAccount, resetClaim } from '@/lib/accounts';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
-import { Plus, Trash2, RefreshCw, Zap, LogOut, RotateCcw, CheckCircle2, ImagePlus, X, FileArchive, Megaphone, Power, MonitorPlay, Save, Webhook, Link2, ArrowUp, ArrowDown, Crown, Shield, AlertTriangle } from 'lucide-react';
+import { Plus, Trash2, RefreshCw, LogOut, RotateCcw, Megaphone, Power, MonitorPlay, Save, Webhook, Link2, ArrowUp, ArrowDown, Crown, AlertTriangle, Zap } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { invalidateAdCache } from '@/components/AdSlot';
 import { AccountDropForm } from '@/components/admin/AccountDropForm';
@@ -21,18 +21,6 @@ export default function Admin() {
   const [discordRoleId, setDiscordRoleId] = useState('');
   const [webhookSaving, setWebhookSaving] = useState(false);
   const [webhookSuccess, setWebhookSuccess] = useState(false);
-  const [bulkCategory, setBulkCategory] = useState<AccountCategory>('Steam');
-  const [bulkTitle, setBulkTitle] = useState('');
-  const [bulkPaste, setBulkPaste] = useState('');
-  const [bulkError, setBulkError] = useState('');
-  const [bulkSuccess, setBulkSuccess] = useState('');
-  const [bulkAdding, setBulkAdding] = useState(false);
-  const [bulkNotes, setBulkNotes] = useState('');
-  const [bulkGames, setBulkGames] = useState('');
-  const [bulkPlanDetails, setBulkPlanDetails] = useState('');
-  const [bulkNetflixType, setBulkNetflixType] = useState<NetflixType>('account');
-  const [bulkScreenshot, setBulkScreenshot] = useState<string | null>(null);
-  const [bulkCookieFile, setBulkCookieFile] = useState<{ data: string; name: string } | null>(null);
   const [quickLinks, setQuickLinks] = useState<any[]>([]);
   const [newLinkLabel, setNewLinkLabel] = useState('');
   const [newLinkHref, setNewLinkHref] = useState('');
@@ -177,48 +165,7 @@ export default function Admin() {
       fetchAnnouncements(); } catch {}
   };
 
-  // Bulk drop
-  const handleBulkAdd = async (e: React.FormEvent) => {
-    e.preventDefault(); setBulkError(''); setBulkSuccess('');
-    const isBC = bulkCategory === 'Netflix' && bulkNetflixType === 'cookies';
-    const lines = bulkPaste.trim().split('\n').filter(l => l.trim());
-    if (!isBC && lines.length === 0) { setBulkError('Paste at least one email:password line.'); return; }
-    if (!bulkTitle.trim()) { setBulkError('Title required.'); return; }
-    if (isBC && !bulkCookieFile) { setBulkError('Upload cookie file.'); return; }
-    setBulkAdding(true);
-    if (isBC && lines.length === 0) {
-      const r = await addAccount({ title: bulkTitle, category: bulkCategory, email: '', password: '', notes: bulkNotes || undefined, screenshot: bulkScreenshot || undefined, netflixType: bulkNetflixType, cookieFile: bulkCookieFile?.data, cookieFileName: bulkCookieFile?.name });
-      if (r) { sendWebhook(r); setBulkSuccess('Added 1 account!'); } else setBulkError('Failed.');
-    } else {
-      const parsed = lines.map(l => { const p = l.split(':'); return p.length >= 2 ? { email: p[0].trim(), password: p.slice(1).join(':').trim() } : null; });
-      if (parsed.some(p => !p)) { setBulkError('Invalid format.'); setBulkAdding(false); return; }
-      let added = 0;
-      for (let i = 0; i < parsed.length; i++) {
-        const p = parsed[i]!;
-        const r = await addAccount({ title: lines.length === 1 ? bulkTitle : `${bulkTitle} #${i + 1}`, category: bulkCategory, email: p.email, password: p.password, notes: bulkNotes || undefined, screenshot: bulkScreenshot || undefined, games: bulkCategory === 'Steam' ? bulkGames || undefined : undefined, planDetails: bulkCategory === 'Crunchyroll' ? bulkPlanDetails || undefined : undefined, netflixType: bulkCategory === 'Netflix' ? bulkNetflixType : undefined, cookieFile: isBC && bulkCookieFile ? bulkCookieFile.data : undefined, cookieFileName: isBC && bulkCookieFile ? bulkCookieFile.name : undefined });
-        if (r) { added++; if (added === 1) sendWebhook(r); }
-      }
-      setBulkSuccess(`Added ${added}/${lines.length}!`);
-    }
-    setBulkAdding(false); setBulkPaste(''); setBulkTitle(''); setBulkNotes(''); setBulkGames(''); setBulkPlanDetails(''); setBulkScreenshot(null); setBulkCookieFile(null);
-    fetchAccounts().then(setAccounts); setTimeout(() => setBulkSuccess(''), 4000);
-  };
 
-  const sendWebhook = async (a: AccountDrop) => {
-    try { await supabase.functions.invoke('discord-webhook', { body: { title: a.title, category: a.category, imageUrl: a.screenshot || undefined, accountUrl: `${window.location.origin}/account/${a.slug}` } }); } catch {}
-  };
-
-  const handleBulkFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; if (!file || file.size > 5 * 1024 * 1024) return;
-    const name = `${crypto.randomUUID()}.${file.name.split('.').pop() || 'png'}`;
-    const { error } = await supabase.storage.from('screenshots').upload(name, file, { contentType: file.type, upsert: true });
-    if (!error) { const { data } = supabase.storage.from('screenshots').getPublicUrl(name); setBulkScreenshot(data.publicUrl); }
-  };
-
-  const handleBulkCookieChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; if (!file || file.size > 10 * 1024 * 1024) return;
-    const reader = new FileReader(); reader.onload = () => setBulkCookieFile({ data: reader.result as string, name: file.name }); reader.readAsDataURL(file);
-  };
 
   const handleDelete = async (id: string) => { await deleteAccount(id); fetchAccounts().then(setAccounts); };
   const handleReset = async (id: string) => { await resetClaim(id); fetchAccounts().then(setAccounts); };
@@ -388,45 +335,8 @@ export default function Admin() {
           ))}
         </Section>
 
-        {/* Bulk Drop */}
-        <Section icon={<Zap className="w-4 h-4 text-primary" />} title="Bulk Drop">
-          <form onSubmit={handleBulkAdd} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="sm:col-span-2"><input type="text" value={bulkTitle} onChange={e => setBulkTitle(e.target.value)} placeholder="Title prefix" className="admin-input" /></div>
-            <div><select value={bulkCategory} onChange={e => setBulkCategory(e.target.value as AccountCategory)} className="admin-input cursor-pointer">{Object.keys(CATEGORY_COLORS).map(c => <option key={c} value={c}>{c}</option>)}</select></div>
-            {bulkCategory === 'Netflix' && (
-              <div><select value={bulkNetflixType} onChange={e => setBulkNetflixType(e.target.value as NetflixType)} className="admin-input cursor-pointer"><option value="account">Account</option><option value="cookies">Cookies</option></select></div>
-            )}
-            {!(bulkCategory === 'Netflix' && bulkNetflixType === 'cookies') && (
-              <div className="sm:col-span-2"><textarea value={bulkPaste} onChange={e => setBulkPaste(e.target.value)} placeholder="email:password per line" rows={4} className="admin-input resize-y font-mono" /></div>
-            )}
-            {bulkCategory === 'Netflix' && bulkNetflixType === 'cookies' && (
-              <div className="sm:col-span-2">
-                <input type="file" accept=".rar,.zip,.7z" onChange={handleBulkCookieChange} className="hidden" id="bulk-cookie" />
-                {bulkCookieFile ? (
-                  <div className="flex items-center gap-2 p-2.5 bg-muted rounded-lg border border-border">
-                    <FileArchive className="w-3.5 h-3.5 text-primary" /><span className="text-xs flex-1">{bulkCookieFile.name}</span>
-                    <button type="button" onClick={() => setBulkCookieFile(null)} className="text-muted-foreground hover:text-destructive cursor-pointer"><X className="w-3.5 h-3.5" /></button>
-                  </div>
-                ) : <label htmlFor="bulk-cookie" className="w-full p-3 border border-dashed border-border rounded-lg text-xs text-muted-foreground hover:border-primary cursor-pointer flex items-center justify-center gap-2"><FileArchive className="w-3.5 h-3.5" /> Upload cookie file</label>}
-              </div>
-            )}
-            {bulkCategory === 'Steam' && <div className="sm:col-span-2"><input type="text" value={bulkGames} onChange={e => setBulkGames(e.target.value)} placeholder="Games" className="admin-input" /></div>}
-            {bulkCategory === 'Crunchyroll' && <div className="sm:col-span-2"><input type="text" value={bulkPlanDetails} onChange={e => setBulkPlanDetails(e.target.value)} placeholder="Plan" className="admin-input" /></div>}
-            <div className="sm:col-span-2"><textarea value={bulkNotes} onChange={e => setBulkNotes(e.target.value)} rows={2} placeholder="Notes" className="admin-input resize-none" /></div>
-            <div className="sm:col-span-2">
-              <input type="file" accept="image/*" onChange={handleBulkFileChange} className="hidden" id="bulk-ss" />
-              {bulkScreenshot ? (
-                <div className="relative inline-block"><img src={bulkScreenshot} alt="" className="w-28 h-16 object-cover rounded-lg border border-border" /><button type="button" onClick={() => setBulkScreenshot(null)} className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center cursor-pointer"><X className="w-2.5 h-2.5" /></button></div>
-              ) : <label htmlFor="bulk-ss" className="w-full p-3 border border-dashed border-border rounded-lg text-xs text-muted-foreground hover:border-primary cursor-pointer flex items-center justify-center gap-2"><ImagePlus className="w-3.5 h-3.5" /> Screenshot</label>}
-            </div>
-            {bulkError && <p className="sm:col-span-2 text-destructive text-[11px]">{bulkError}</p>}
-            {bulkSuccess && <p className="sm:col-span-2 text-success text-[11px]">{bulkSuccess}</p>}
-            <div className="sm:col-span-2"><button type="submit" disabled={bulkAdding} className="px-5 py-2.5 rounded-lg text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 cursor-pointer flex items-center gap-1.5 disabled:opacity-50"><Plus className="w-3.5 h-3.5" /> {bulkAdding ? 'Adding...' : 'Bulk Drop'}</button></div>
-          </form>
-        </Section>
-
-        {/* Single Drop */}
-        <Section icon={<Plus className="w-4 h-4 text-primary" />} title="Drop Single Account">
+        {/* Drop Accounts */}
+        <Section icon={<Plus className="w-4 h-4 text-primary" />} title="Drop Accounts">
           <AccountDropForm onAccountAdded={() => fetchAccounts().then(setAccounts)} userId={user?.id} />
         </Section>
 
