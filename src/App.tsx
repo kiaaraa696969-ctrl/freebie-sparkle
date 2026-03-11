@@ -25,6 +25,7 @@ const AppContent = () => {
   return (
     <>
       {adBlockDetected && <AdBlockOverlay onRecheck={recheck} />}
+      <AdsterraGlobalAds />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/auth" element={<Auth />} />

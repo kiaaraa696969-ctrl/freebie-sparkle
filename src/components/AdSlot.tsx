@@ -55,6 +55,8 @@ const SLOT_CONFIG: Record<string, { height: number; width: number; eager: boolea
   sidebar_middle: { height: 300, width: 300, eager: false, responsive: false },
   sidebar_bottom: { height: 250, width: 300, eager: false, responsive: false },
   mobile_sticky:  { height: 50,  width: 320, eager: true,  responsive: true },
+  social_bar:     { height: 0,   width: 0,   eager: true,  responsive: true },
+  popunder:       { height: 0,   width: 0,   eager: true,  responsive: true },
 };
 
 export async function loadAds() {
