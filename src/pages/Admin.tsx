@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { AccountDrop, CATEGORY_COLORS, fetchAccounts, deleteAccount, resetClaim } from '@/lib/accounts';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
-import { Plus, Trash2, RefreshCw, LogOut, RotateCcw, Megaphone, Power, MonitorPlay, Save, Webhook, Link2, ArrowUp, ArrowDown, Crown, AlertTriangle } from 'lucide-react';
+import { Plus, Trash2, RefreshCw, LogOut, RotateCcw, Megaphone, Power, MonitorPlay, Save, Webhook, Link2, ArrowUp, ArrowDown, Crown, AlertTriangle, Zap } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { invalidateAdCache } from '@/components/AdSlot';
 import { AccountDropForm } from '@/components/admin/AccountDropForm';
