@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import Vip from "./pages/Vip";
 import AboutFaq from "./pages/AboutFaq";
 import NotFound from "./pages/NotFound";
+import { AdsterraGlobalAds } from "@/components/AdsterraGlobalAds";
 
 const queryClient = new QueryClient();
 
