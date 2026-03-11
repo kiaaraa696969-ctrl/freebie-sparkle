@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AccountDrop, AccountCategory, NetflixType, CATEGORY_COLORS, fetchAccounts, addAccount, deleteAccount, resetClaim } from '@/lib/accounts';
+import { AccountDrop, AccountCategory, CATEGORY_COLORS, fetchAccounts, deleteAccount, resetClaim } from '@/lib/accounts';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
 import { Plus, Trash2, RefreshCw, Zap, LogOut, RotateCcw, CheckCircle2, ImagePlus, X, FileArchive, Megaphone, Power, MonitorPlay, Save, Webhook, Link2, ArrowUp, ArrowDown, Crown, Shield, AlertTriangle } from 'lucide-react';
