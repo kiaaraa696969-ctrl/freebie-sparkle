@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/sitemap.xml", "destination": "https://rfrqgnyielreavqwiuif.supabase.co/functions/v1/sitemap" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS idx_accounts_dropped_at ON public.accounts (dropped_at DESC);
