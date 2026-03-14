@@ -9,11 +9,21 @@ import { supabase } from '@/integrations/supabase/client';
  * Hidden for VIP users.
  */
 export function AdsterraGlobalAds() {
-  const { isVip } = useAuth();
+  const { isVip, loading } = useAuth();
   const injectedRef = useRef(false);
 
   useEffect(() => {
-    if (isVip || injectedRef.current) return;
+    // Wait until auth loading is complete before deciding
+    if (loading) return;
+
+    // If VIP, remove any previously injected scripts and bail
+    if (isVip) {
+      document.querySelectorAll('script[data-ad-slot="social_bar"], script[data-ad-slot="popunder"]').forEach((el) => el.remove());
+      injectedRef.current = false;
+      return;
+    }
+
+    if (injectedRef.current) return;
     injectedRef.current = true;
 
     (async () => {
@@ -28,18 +38,15 @@ export function AdsterraGlobalAds() {
       for (const slot of slots) {
         if (!slot.ad_code?.trim()) continue;
 
-        // Parse the ad_code HTML to extract script src and inline content
         const temp = document.createElement('div');
         temp.innerHTML = slot.ad_code;
 
         const scripts = temp.querySelectorAll('script');
         scripts.forEach((origScript) => {
           const script = document.createElement('script');
-          // Copy attributes
           Array.from(origScript.attributes).forEach((attr) => {
             script.setAttribute(attr.name, attr.value);
           });
-          // Copy inline content
           if (origScript.textContent) {
             script.textContent = origScript.textContent;
           }
@@ -50,11 +57,10 @@ export function AdsterraGlobalAds() {
     })();
 
     return () => {
-      // Cleanup on unmount
       document.querySelectorAll('script[data-ad-slot="social_bar"], script[data-ad-slot="popunder"]').forEach((el) => el.remove());
       injectedRef.current = false;
     };
-  }, [isVip]);
+  }, [isVip, loading]);
 
   return null;
 }
