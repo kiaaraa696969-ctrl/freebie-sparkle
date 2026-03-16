@@ -11,14 +11,15 @@ import { supabase } from '@/integrations/supabase/client';
  */
 export function AdsterraGlobalAds() {
   const { isVip, loading } = useAuth();
+  const location = useLocation();
   const injectedRef = useRef(false);
+  const isAdminPage = location.pathname.startsWith('/admin');
 
   useEffect(() => {
-    // Wait until auth loading is complete before deciding
     if (loading) return;
 
-    // If VIP, remove any previously injected scripts and bail
-    if (isVip) {
+    // Remove ads and skip injection on admin pages or for VIP users
+    if (isVip || isAdminPage) {
       document.querySelectorAll('script[data-ad-slot="social_bar"], script[data-ad-slot="popunder"]').forEach((el) => el.remove());
       injectedRef.current = false;
       return;
