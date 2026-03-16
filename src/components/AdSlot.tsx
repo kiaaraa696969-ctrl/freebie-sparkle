@@ -86,7 +86,7 @@ export function invalidateAdCache() {
 }
 
 export function AdSlot({ slotName, fallbackHeight = 'h-[250px]', className = '' }: AdSlotProps) {
-  const { isVip, loading } = useAuth();
+  const { isVip } = useAuth();
   const [adCode, setAdCode] = useState('');
   const [loaded, setLoaded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -96,21 +96,7 @@ export function AdSlot({ slotName, fallbackHeight = 'h-[250px]', className = '' 
   const config = SLOT_CONFIG[slotName] || { height: 250, width: 300, eager: false, responsive: true };
 
   useEffect(() => {
-    if (loading || isVip) {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = '';
-      }
-      injected.current = false;
-      setAdCode('');
-      setLoaded(false);
-      return;
-    }
-
-    if (adsSafeMode) {
-      setLoaded(true);
-      return;
-    }
-
+    if (adsSafeMode) { setLoaded(true); return; }
     let cancelled = false;
     (async () => {
       await loadAds();
@@ -119,39 +105,20 @@ export function AdSlot({ slotName, fallbackHeight = 'h-[250px]', className = '' 
         setLoaded(true);
       }
     })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [slotName, loading, isVip]);
+    return () => { cancelled = true; };
+  }, [slotName]);
 
   useEffect(() => {
-    if (loading || isVip) {
-      setIsVisible(false);
-      return;
-    }
-
-    if (config.eager) {
-      setIsVisible(true);
-      return;
-    }
-
+    if (config.eager) { setIsVisible(true); return; }
     const el = containerRef.current;
     if (!el) return;
-
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        setIsVisible(true);
-        obs.disconnect();
-      }
-    }, { rootMargin: '200px' });
-
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setIsVisible(true); obs.disconnect(); } }, { rootMargin: '200px' });
     obs.observe(el);
     return () => obs.disconnect();
-  }, [loading, isVip, loaded, config.eager]);
+  }, [loaded, config.eager]);
 
   const injectAd = useCallback(() => {
-    if (loading || isVip || injected.current || !containerRef.current || !adCode) return;
+    if (injected.current || !containerRef.current || !adCode) return;
     injected.current = true;
     const container = containerRef.current;
     container.innerHTML = '';
@@ -198,13 +165,13 @@ export function AdSlot({ slotName, fallbackHeight = 'h-[250px]', className = '' 
       try { iframe.style.height = `${Math.max(doc.body?.scrollHeight || config.height, config.height)}px`; } catch {}
     });
     try { if (doc.body) ro.observe(doc.body); } catch {}
-  }, [loading, isVip, adCode, config.height, slotName]);
+  }, [adCode, config.height]);
 
   useEffect(() => {
     if (isVisible && loaded && adCode) injectAd();
   }, [isVisible, loaded, adCode, injectAd]);
 
-  if (loading || isVip || adsSafeMode) return null;
+  if (isVip || adsSafeMode) return null;
 
   if (loaded && (!adCode || adCode.trim() === '')) {
     return (
