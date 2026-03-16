@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { loadAds } from '@/components/AdSlot';
 import { supabase } from '@/integrations/supabase/client';
