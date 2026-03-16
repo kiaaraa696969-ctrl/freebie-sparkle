@@ -62,7 +62,7 @@ export function AdsterraGlobalAds() {
       document.querySelectorAll('script[data-ad-slot="social_bar"], script[data-ad-slot="popunder"]').forEach((el) => el.remove());
       injectedRef.current = false;
     };
-  }, [isVip, loading]);
+  }, [isVip, loading, isAdminPage]);
 
   return null;
 }
