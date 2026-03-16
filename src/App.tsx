@@ -20,12 +20,14 @@ import { AdsterraGlobalAds } from "@/components/AdsterraGlobalAds";
 const queryClient = new QueryClient();
 
 const AppContent = () => {
+  const location = useLocation();
+  const isAdmin = location.pathname === '/admin';
   const { adBlockDetected, recheck } = useAdBlockDetector();
 
   return (
     <>
-      {adBlockDetected && <AdBlockOverlay onRecheck={recheck} />}
-      <AdsterraGlobalAds />
+      {!isAdmin && adBlockDetected && <AdBlockOverlay onRecheck={recheck} />}
+      {!isAdmin && <AdsterraGlobalAds />}
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/auth" element={<Auth />} />
