@@ -40,6 +40,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let isMounted = true;
 
+    let initialLoadDone = false;
+
     const applySessionState = (nextSession: Session | null) => {
       if (!isMounted) return;
 
@@ -52,16 +54,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setDisplayName(null);
         setAvatarUrl(null);
         setLoading(false);
+        initialLoadDone = true;
         return;
       }
 
-      setLoading(true);
+      // Only show loading spinner on initial load, not on token refreshes
+      if (!initialLoadDone) setLoading(true);
+
       void Promise.all([
         checkAdmin(nextSession.user.id),
         fetchProfile(nextSession.user.id),
         checkVip(nextSession.user.id),
       ]).finally(() => {
-        if (isMounted) setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+          initialLoadDone = true;
+        }
       });
     };
 
