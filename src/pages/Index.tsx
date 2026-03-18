@@ -127,11 +127,10 @@ const Index = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-10 sm:pt-16 sm:pb-12">
         <div className="max-w-2xl">
           <h1 className="text-3xl sm:text-5xl font-bold text-foreground leading-tight mb-4">
-            Free Premium<br />
-            <span className="text-primary">Account Drops</span>
+            Welcome to <span className="text-primary">Ancient Blood</span>
           </h1>
           <p className="text-sm sm:text-base text-muted-foreground max-w-md leading-relaxed">
-            Steam, Netflix, Spotify & more — fresh drops daily, first come first served.
+            Our goal is to provide premium stuff for free.
           </p>
         </div>
       </div>
