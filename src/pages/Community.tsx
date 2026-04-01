@@ -123,7 +123,6 @@ export default function Community() {
       <SEOHead
         title="Community Drops — Ancient Blood"
         description="Community-submitted premium account drops. Share and discover free accounts."
-        url="https://ancientblood.online/community"
       />
       <AnnouncementBanner />
 
