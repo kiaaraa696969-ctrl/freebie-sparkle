@@ -59,6 +59,8 @@ export default function Admin() {
       fetchQuickLinks();
       fetchVipMembers();
       fetchRedirectLogs();
+      fetchCommunityDrops();
+      fetchCommunityAutoApprove();
     }
   }, [isAdmin]);
 
