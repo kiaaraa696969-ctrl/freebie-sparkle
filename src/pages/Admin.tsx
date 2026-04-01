@@ -227,6 +227,35 @@ export default function Admin() {
   const handleDelete = async (id: string) => { await deleteAccount(id); fetchAccounts().then(setAccounts); };
   const handleReset = async (id: string) => { await resetClaim(id); fetchAccounts().then(setAccounts); };
 
+  const fetchCommunityDrops = async () => {
+    const { data } = await supabase.from('community_drops').select('*').order('created_at', { ascending: false });
+    setCommunityDrops(data || []);
+  };
+  const fetchCommunityAutoApprove = async () => {
+    const { data } = await supabase.from('site_settings').select('value').eq('key', 'community_auto_approve').maybeSingle();
+    setCommunityAutoApprove(data?.value === 'true');
+  };
+  const handleToggleCommunityAutoApprove = async () => {
+    const next = !communityAutoApprove;
+    const ts = new Date().toISOString();
+    const { data: ex } = await supabase.from('site_settings').select('id').eq('key', 'community_auto_approve').maybeSingle();
+    if (ex) await supabase.from('site_settings').update({ value: String(next), updated_at: ts }).eq('id', ex.id);
+    else await supabase.from('site_settings').insert({ key: 'community_auto_approve', value: String(next), updated_at: ts });
+    setCommunityAutoApprove(next);
+  };
+  const handleApproveCommunityDrop = async (id: string) => {
+    await supabase.from('community_drops').update({ status: 'approved', approved_at: new Date().toISOString() }).eq('id', id);
+    fetchCommunityDrops();
+  };
+  const handleRejectCommunityDrop = async (id: string) => {
+    await supabase.from('community_drops').update({ status: 'rejected', rejected_at: new Date().toISOString() }).eq('id', id);
+    fetchCommunityDrops();
+  };
+  const handleDeleteCommunityDrop = async (id: string) => {
+    await supabase.from('community_drops').delete().eq('id', id);
+    fetchCommunityDrops();
+  };
+
   if (loading) return null;
   if (!user) return <Navigate to="/auth" replace />;
   if (!isAdmin) return <Navigate to="/" replace />;
