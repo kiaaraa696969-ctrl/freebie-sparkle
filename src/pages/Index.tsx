@@ -79,6 +79,9 @@ const Index = () => {
             <a href="/vip" className="text-xs font-semibold text-warning hover:text-warning/80 transition-colors flex items-center gap-1">
               <Crown className="w-3.5 h-3.5" /> VIP
             </a>
+            <a href="/community" className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+              <Users className="w-3.5 h-3.5" /> Community
+            </a>
             {isAdmin && (
               <a href="/admin" className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
                 <Shield className="w-3.5 h-3.5" />
