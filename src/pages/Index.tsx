@@ -6,7 +6,7 @@ import { RightSidebar } from '@/components/RightSidebar';
 import { AnnouncementBanner } from '@/components/AnnouncementBanner';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { ChevronDown, Megaphone, ExternalLink, LogIn, LogOut, Shield, User, Search, X, Crown } from 'lucide-react';
+import { ChevronDown, Megaphone, ExternalLink, LogIn, LogOut, Shield, User, Search, X, Crown, Users } from 'lucide-react';
 import { useOnlineUsers } from '@/hooks/useOnlineUsers';
 import { AdSlot } from '@/components/AdSlot';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -78,6 +78,9 @@ const Index = () => {
             <span className="text-xs font-medium text-primary">{available} drops</span>
             <a href="/vip" className="text-xs font-semibold text-warning hover:text-warning/80 transition-colors flex items-center gap-1">
               <Crown className="w-3.5 h-3.5" /> VIP
+            </a>
+            <a href="/community" className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+              <Users className="w-3.5 h-3.5" /> Community
             </a>
             {isAdmin && (
               <a href="/admin" className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">

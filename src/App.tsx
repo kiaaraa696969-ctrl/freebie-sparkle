@@ -14,6 +14,7 @@ import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Vip from "./pages/Vip";
 import AboutFaq from "./pages/AboutFaq";
+import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
 import { AdsterraGlobalAds } from "@/components/AdsterraGlobalAds";
 
@@ -33,6 +34,7 @@ const AppContent = () => {
         <Route path="/account/:slug/reveal" element={<AccountReveal />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/vip" element={<Vip />} />
+        <Route path="/community" element={<Community />} />
         <Route path="/about" element={<AboutFaq />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />

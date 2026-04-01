@@ -235,6 +235,51 @@ export type Database = {
           },
         ]
       }
+      community_drops: {
+        Row: {
+          approved_at: string | null
+          category: string
+          claimed_at: string | null
+          created_at: string
+          email: string
+          id: string
+          is_claimed: boolean
+          password: string
+          rejected_at: string | null
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          category?: string
+          claimed_at?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          is_claimed?: boolean
+          password: string
+          rejected_at?: string | null
+          status?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          category?: string
+          claimed_at?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          is_claimed?: boolean
+          password?: string
+          rejected_at?: string | null
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
