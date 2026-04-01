@@ -46,6 +46,8 @@ export default function Admin() {
   const [adsSafeModeSaving, setAdsSafeModeSaving] = useState(false);
   const [redirectLogs, setRedirectLogs] = useState<any[]>([]);
   const [redirectLogsLoading, setRedirectLogsLoading] = useState(false);
+  const [communityDrops, setCommunityDrops] = useState<any[]>([]);
+  const [communityAutoApprove, setCommunityAutoApprove] = useState(false);
 
   useEffect(() => {
     if (isAdmin) {
