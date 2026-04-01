@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { AccountDrop, AccountCategory, NetflixType, CATEGORY_COLORS, fetchAccounts, addAccount, deleteAccount, resetClaim } from '@/lib/accounts';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
-import { Plus, Trash2, RefreshCw, Zap, LogOut, RotateCcw, CheckCircle2, ImagePlus, X, FileArchive, Megaphone, Power, MonitorPlay, Save, Webhook, Link2, ArrowUp, ArrowDown, Crown, Shield, AlertTriangle } from 'lucide-react';
+import { Plus, Trash2, RefreshCw, Zap, LogOut, RotateCcw, CheckCircle2, ImagePlus, X, FileArchive, Megaphone, Power, MonitorPlay, Save, Webhook, Link2, ArrowUp, ArrowDown, Crown, Shield, AlertTriangle, Users } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { invalidateAdCache } from '@/components/AdSlot';
 import { AccountDropForm } from '@/components/admin/AccountDropForm';
