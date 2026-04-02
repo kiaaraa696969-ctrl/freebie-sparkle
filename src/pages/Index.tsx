@@ -11,9 +11,6 @@ import { useOnlineUsers } from '@/hooks/useOnlineUsers';
 import { AdSlot } from '@/components/AdSlot';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import logo from '@/assets/logo.webp';
-import ambassador1 from '@/assets/ambassador-1.jpg';
-import ambassador2 from '@/assets/ambassador-2.jpg';
-import ambassador3 from '@/assets/ambassador-3.jpg';
 import { SEOHead } from '@/components/SEOHead';
 
 const Index = () => {
@@ -223,21 +220,6 @@ const Index = () => {
 
         <div className="lg:hidden mt-10">
           <RightSidebar accounts={accounts} />
-        </div>
-      </div>
-
-      {/* Brand Ambassador */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
-        <div className="bg-card rounded-xl border border-border p-6">
-          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Brand Ambassador</h2>
-          <p className="text-lg font-bold text-foreground mb-4">Tamanna Bhatia</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[ambassador1, ambassador2, ambassador3].map((src, i) => (
-              <div key={i} className="rounded-lg overflow-hidden border border-border aspect-[3/4]">
-                <img src={src} alt={`Tamanna Bhatia - Ancient Blood Ambassador ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 
