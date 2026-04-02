@@ -226,6 +226,21 @@ const Index = () => {
         </div>
       </div>
 
+      {/* Brand Ambassador */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
+        <div className="bg-card rounded-xl border border-border p-6">
+          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Brand Ambassador</h2>
+          <p className="text-lg font-bold text-foreground mb-4">Tamanna Bhatia</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[ambassador1, ambassador2, ambassador3].map((src, i) => (
+              <div key={i} className="rounded-lg overflow-hidden border border-border aspect-[3/4]">
+                <img src={src} alt={`Tamanna Bhatia - Ancient Blood Ambassador ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
         <AdSlot slotName="footer_above" fallbackHeight="h-[90px]" />
       </div>
