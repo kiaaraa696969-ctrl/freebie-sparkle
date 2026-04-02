@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import logo from '@/assets/logo.webp';
+import { ContributorLeaderboard } from '@/components/ContributorLeaderboard';
 
 interface CommunityDrop {
   id: string;
