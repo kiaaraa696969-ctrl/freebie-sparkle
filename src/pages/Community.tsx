@@ -200,6 +200,9 @@ export default function Community() {
           </div>
         )}
 
+        {/* Leaderboard */}
+        <ContributorLeaderboard />
+
         {/* Tabs */}
         <div className="flex gap-1 mb-6 bg-muted/50 rounded-lg p-1 w-fit">
           <button
