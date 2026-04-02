@@ -11,6 +11,9 @@ import { useOnlineUsers } from '@/hooks/useOnlineUsers';
 import { AdSlot } from '@/components/AdSlot';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import logo from '@/assets/logo.webp';
+import ambassador1 from '@/assets/ambassador-1.jpg';
+import ambassador2 from '@/assets/ambassador-2.jpg';
+import ambassador3 from '@/assets/ambassador-3.jpg';
 import { SEOHead } from '@/components/SEOHead';
 
 const Index = () => {
