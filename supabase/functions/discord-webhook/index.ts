@@ -56,7 +56,6 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { title, category, imageUrl, accountUrl } = await req.json();
 
     // Category-specific messaging
     const categoryUpper = (category || "").toUpperCase();
