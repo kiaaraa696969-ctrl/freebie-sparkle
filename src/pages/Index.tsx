@@ -168,6 +168,32 @@ const Index = () => {
         </div>
       )}
 
+      {/* Community Drops CTA */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+        <a href="/community" className="block group">
+          <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 p-5 sm:p-6 transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/15 text-primary shrink-0">
+                  <Users className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                    Community Drops
+                  </h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+                    Drop &amp; discover free accounts shared by the community
+                  </p>
+                </div>
+              </div>
+              <div className="shrink-0 text-primary opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+                <ExternalLink className="w-5 h-5" />
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
         <AdSlot slotName="hero_below" fallbackHeight="h-[90px]" />
       </div>
