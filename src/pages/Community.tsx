@@ -163,6 +163,7 @@ export default function Community() {
               title: `${title.trim()} (Community Drop)`,
               category,
               accountUrl: `${window.location.origin}/community`,
+              webhookType: 'community',
             },
           });
         } catch {}

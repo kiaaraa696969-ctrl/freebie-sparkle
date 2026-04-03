@@ -254,6 +254,7 @@ export default function Admin() {
             title: `${drop.title} (Community Drop)`,
             category: drop.category,
             accountUrl: `${window.location.origin}/community`,
+            webhookType: 'community',
           },
         });
       } catch {}
