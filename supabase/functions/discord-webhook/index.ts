@@ -26,15 +26,26 @@ Deno.serve(async (req) => {
   const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
+  const body = await req.json();
+  const { title, category, imageUrl, accountUrl, webhookType } = body;
+
+  const isCommunity = webhookType === "community";
+
   const { data: settings } = await supabase
     .from("site_settings")
     .select("key, value")
-    .in("key", ["discord_webhook_url", "discord_role_id"]);
+    .in("key", [
+      "discord_webhook_url",
+      "discord_community_webhook_url",
+      "discord_role_id",
+    ]);
 
   const settingsMap: Record<string, string> = {};
   (settings || []).forEach((s: any) => { settingsMap[s.key] = s.value; });
 
-  const webhookUrl = settingsMap["discord_webhook_url"]?.trim();
+  const webhookUrl = isCommunity
+    ? (settingsMap["discord_community_webhook_url"]?.trim() || settingsMap["discord_webhook_url"]?.trim())
+    : settingsMap["discord_webhook_url"]?.trim();
   const roleId = settingsMap["discord_role_id"]?.trim();
 
   if (!webhookUrl) {
