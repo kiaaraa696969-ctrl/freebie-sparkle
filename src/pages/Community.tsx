@@ -136,6 +136,8 @@ export default function Community() {
 
     const autoApprove = setting?.value === 'true';
 
+    const dropStatus = autoApprove ? 'approved' : 'pending';
+
     const { error: insertError } = await supabase
       .from('community_drops')
       .insert({
@@ -144,7 +146,7 @@ export default function Community() {
         category,
         email: email.trim(),
         password: password.trim(),
-        status: autoApprove ? 'approved' : 'pending',
+        status: dropStatus,
         ...(autoApprove ? { approved_at: new Date().toISOString() } : {}),
       });
 
@@ -153,6 +155,18 @@ export default function Community() {
       console.error(insertError);
     } else {
       setSuccess(autoApprove ? 'Drop published!' : 'Drop submitted for review!');
+      // Send Discord webhook for auto-approved drops
+      if (autoApprove) {
+        try {
+          await supabase.functions.invoke('discord-webhook', {
+            body: {
+              title: `${title.trim()} (Community Drop)`,
+              category,
+              accountUrl: `${window.location.origin}/community`,
+            },
+          });
+        } catch {}
+      }
       setTitle('');
       setEmail('');
       setPassword('');
