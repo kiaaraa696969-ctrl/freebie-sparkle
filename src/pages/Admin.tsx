@@ -245,6 +245,19 @@ export default function Admin() {
   };
   const handleApproveCommunityDrop = async (id: string) => {
     await supabase.from('community_drops').update({ status: 'approved', approved_at: new Date().toISOString() }).eq('id', id);
+    // Send Discord webhook for the approved community drop
+    const drop = communityDrops.find(d => d.id === id);
+    if (drop) {
+      try {
+        await supabase.functions.invoke('discord-webhook', {
+          body: {
+            title: `${drop.title} (Community Drop)`,
+            category: drop.category,
+            accountUrl: `${window.location.origin}/community`,
+          },
+        });
+      } catch {}
+    }
     fetchCommunityDrops();
   };
   const handleRejectCommunityDrop = async (id: string) => {
