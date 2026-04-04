@@ -18,6 +18,7 @@ import { SEOHead } from '@/components/SEOHead';
 const Index = () => {
   const { user, isAdmin, isVip, signOut, displayName, avatarUrl } = useAuth();
   const onlineCount = useOnlineUsers();
+  const { allTime, today } = useVisitCounter();
   const [accounts, setAccounts] = useState<AccountDrop[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
