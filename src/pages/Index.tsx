@@ -8,6 +8,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { ChevronDown, Megaphone, ExternalLink, LogIn, LogOut, Shield, User, Search, X, Crown, Users } from 'lucide-react';
 import { useOnlineUsers } from '@/hooks/useOnlineUsers';
+import { useVisitCounter } from '@/hooks/useVisitCounter';
+import { Eye } from 'lucide-react';
 import { AdSlot } from '@/components/AdSlot';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import logo from '@/assets/logo.webp';
