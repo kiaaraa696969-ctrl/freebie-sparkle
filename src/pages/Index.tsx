@@ -135,9 +135,23 @@ const Index = () => {
           <h1 className="text-3xl sm:text-5xl font-bold text-foreground leading-tight mb-4">
             Welcome to <span className="text-primary">Ancient Blood</span>
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground max-w-md leading-relaxed">
+          <p className="text-sm sm:text-base text-muted-foreground max-w-md leading-relaxed mb-5">
             Our goal is to provide premium stuff for free.
           </p>
+          {allTime !== null && (
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card border border-border">
+                <Eye className="w-4 h-4 text-primary" />
+                <span className="text-sm font-semibold text-foreground">{allTime.toLocaleString()}</span>
+                <span className="text-xs text-muted-foreground">all time</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card border border-border">
+                <Eye className="w-4 h-4 text-primary" />
+                <span className="text-sm font-semibold text-foreground">{today?.toLocaleString()}</span>
+                <span className="text-xs text-muted-foreground">today</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
