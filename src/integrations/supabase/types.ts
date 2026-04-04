@@ -280,6 +280,21 @@ export type Database = {
         }
         Relationships: []
       }
+      page_visits: {
+        Row: {
+          id: string
+          visited_at: string
+        }
+        Insert: {
+          id?: string
+          visited_at?: string
+        }
+        Update: {
+          id?: string
+          visited_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

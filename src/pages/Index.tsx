@@ -8,6 +8,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { ChevronDown, Megaphone, ExternalLink, LogIn, LogOut, Shield, User, Search, X, Crown, Users } from 'lucide-react';
 import { useOnlineUsers } from '@/hooks/useOnlineUsers';
+import { useVisitCounter } from '@/hooks/useVisitCounter';
+import { Eye } from 'lucide-react';
 import { AdSlot } from '@/components/AdSlot';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import logo from '@/assets/logo.webp';
@@ -16,6 +18,7 @@ import { SEOHead } from '@/components/SEOHead';
 const Index = () => {
   const { user, isAdmin, isVip, signOut, displayName, avatarUrl } = useAuth();
   const onlineCount = useOnlineUsers();
+  const { allTime, today } = useVisitCounter();
   const [accounts, setAccounts] = useState<AccountDrop[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
@@ -75,6 +78,12 @@ const Index = () => {
               </span>
               {onlineCount}
             </span>
+            {allTime !== null && (
+              <span className="text-xs text-muted-foreground items-center gap-1 hidden md:flex" title={`Today: ${today}`}>
+                <Eye className="w-3.5 h-3.5" />
+                {allTime.toLocaleString()} · {today?.toLocaleString()} today
+              </span>
+            )}
             <span className="text-xs font-medium text-primary">{available} drops</span>
             <a href="/vip" className="text-xs font-semibold text-warning hover:text-warning/80 transition-colors flex items-center gap-1">
               <Crown className="w-3.5 h-3.5" /> VIP
