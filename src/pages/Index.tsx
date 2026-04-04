@@ -78,6 +78,12 @@ const Index = () => {
               </span>
               {onlineCount}
             </span>
+            {allTime !== null && (
+              <span className="text-xs text-muted-foreground items-center gap-1 hidden md:flex" title={`Today: ${today}`}>
+                <Eye className="w-3.5 h-3.5" />
+                {allTime.toLocaleString()} · {today?.toLocaleString()} today
+              </span>
+            )}
             <span className="text-xs font-medium text-primary">{available} drops</span>
             <a href="/vip" className="text-xs font-semibold text-warning hover:text-warning/80 transition-colors flex items-center gap-1">
               <Crown className="w-3.5 h-3.5" /> VIP
